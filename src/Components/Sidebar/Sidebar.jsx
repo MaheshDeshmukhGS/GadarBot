@@ -17,6 +17,8 @@ const Sidebar = ({ setActiveChatId, activeChatId, chats, createNewChat }) => {
         gap: "2rem",
         padding: "0 24px",
         cursor: "pointer",
+        // position:"fixed",
+        // left:"0"
       }}
     >
       <Button

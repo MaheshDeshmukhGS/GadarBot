@@ -1,5 +1,14 @@
-body{
+body {
   margin: 0;
   padding: 0;
   background-color: #fff;
+}
+
+.chat_container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.chat_container::-webkit-scrollbar {
+  width: 0.5em;
+  /* Set a width to make sure the pseudo-element is applied */
 }

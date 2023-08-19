@@ -1,5 +1,3 @@
-import { v4 as uuid } from "uuid";
-
 export const recentChats = {
   1: {
     id: "1",

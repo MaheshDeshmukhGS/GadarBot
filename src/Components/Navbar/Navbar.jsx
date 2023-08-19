@@ -15,15 +15,27 @@ import AdbIcon from "@mui/icons-material/Adb";
 
 const pages = ["Chat", "Raised Tickets", "Resolved Tickets"];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ setShowTickets }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = event => {
-    setAnchorElNav(event.currentTarget);
+    setAnchorElNav(event.currentTarget);npm
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (page, isResolved) => {
     setAnchorElNav(null);
+    if (page === "chat") {
+      setShowTickets({
+        status: false,
+        isResolved: false,
+      });
+    } 
+    if(page === "Raised Tickets") {
+      setShowTickets({
+        status: true,
+        isResolved:true,
+      });
+    }
   };
 
   return (
@@ -43,13 +55,13 @@ function ResponsiveAppBar() {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
-              minWidth:"265px"
+              minWidth: "265px",
             }}
           >
             Gadar AI.
           </Typography>
 
-          <Box sx={{ flexGrow: 1,  display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -85,7 +97,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          
+
           <Typography
             variant="h5"
             noWrap
@@ -104,12 +116,19 @@ function ResponsiveAppBar() {
           >
             Gadar
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } , justifyContent:"flex-end", marginRight:"1rem" }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              justifyContent: "flex-end",
+              marginRight: "1rem",
+            }}
+          >
             {pages.map(page => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block",  }}
+                onClick={() => handleCloseNavMenu(page)}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
