@@ -24,7 +24,7 @@ function ResponsiveAppBar({ setShowTickets }) {
 
   const handleCloseNavMenu = (page, isResolved) => {
     setAnchorElNav(null);
-    if (page === "chat") {
+    if (page === "Chat") {
       setShowTickets({
         status: false,
         isResolved: false,

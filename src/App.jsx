@@ -17,12 +17,15 @@ function App() {
   const [chats, setChats] = useState(recentChats);
   const [activeChatId, setActiveChatId] = useState("1");
   const [loading, setLoading] = useState(false);
+  const [tickets, setTickets] = useState([]);
   const [showTickets, setShowTickets] = useState({
     status: false,
     isResolved: false,
   });
 
-  const currentChat = chats[activeChatId] ? chats[activeChatId].chats : [];
+  const { isResolved, status } = showTickets;
+
+  const currentChat = chats[activeChatId] ? chats[activeChatId]?.chats : [];
 
   console.log(showTickets, "showTickets");
 
@@ -45,27 +48,32 @@ function App() {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          message_history: JSON.stringify(currentChat),
+          // message_history: JSON.stringify(currentChat),
           prompt: prompt,
         }),
       });
       const apiData = await apiRes.json();
 
-      setChats(prevChats => ({
-        ...prevChats,
-        [activeChatId]: {
-          ...prevChats[activeChatId],
-          chats: [
-            ...prevChats[activeChatId].chats,
-            { isSystemGenerated: true, message: apiData?.content },
-          ],
-        },
-      }));
+      setChats(prevChats => {
+        const chats = prevChats;
+        const activeChat = chats[activeChatId];
+        const heading = activeChat.length === 0 ? `${prompt.substring(0, 30)}...` : activeChat?.heading;
+
+        return {
+          ...chats,
+          [activeChatId]: {
+            ...activeChat,
+            heading,
+            chats: [...activeChat.chats, { isSystemGenerated: true, message: apiData?.content }],
+          },
+        };
+      });
 
       setLoading(false);
 
       return apiData;
     } catch (e) {
+      setLoading(false);
       console.log(e);
     }
   };
@@ -77,7 +85,7 @@ function App() {
       ...prevChats,
       [activeChatId]: {
         ...prevChats[activeChatId],
-        chats: [...prevChats[activeChatId].chats, { isSystemGenerated: false, message: prompt }],
+        chats: [...prevChats[activeChatId]?.chats, { isSystemGenerated: false, message: prompt }],
       },
     }));
 
@@ -94,41 +102,63 @@ function App() {
   return (
     <ThemeProvider theme={customTheme}>
       <ResponsiveAppBar setShowTickets={setShowTickets} />
-      <Box sx={{ display: "grid", gridTemplateColumns: "300px 1fr" }}>
-        <Sidebar
-          activeChatId={activeChatId}
-          setActiveChatId={setActiveChatId}
-          chats={chats}
-          createNewChat={createNewChat}
-        />
+      {!status ? (
+        <Box sx={{ display: "grid", gridTemplateColumns: "300px 1fr" }}>
+          <Sidebar
+            activeChatId={activeChatId}
+            setActiveChatId={setActiveChatId}
+            chats={chats}
+            createNewChat={createNewChat}
+          />
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              padding: "20px 35px",
+              boxSizing: "border-box",
+            }}
+          >
+            <Box
+              className="chat_container"
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                height: "75vh",
+                overflow: "scroll",
+              }}
+            >
+              {currentChat?.map(details => {
+                return (
+                  <ChatBox isSystemGenerated={details?.isSystemGenerated} text={details?.message} />
+                );
+              })}
+            </Box>
+
+            <ChatInput
+              prompt={prompt}
+              placeholder={loading ? "Generating response..." : "Type Anything..."}
+              onChange={handlePromptChange}
+              onKeyDown={handleEnterPressed}
+              submitPrompt={submitPrompt}
+              setPrompt={setPrompt}
+            />
+          </Box>
+        </Box>
+      ) : (
         <Box
           sx={{
-            width: "100%",
             display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-            padding: "20px 35px",
-            boxSizing: "border-box",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "calc(100vh - 72px)",
           }}
         >
-          <Box className="chat_container" sx={{display:"flex", flexDirection:"column", gap:"1rem", height:"75vh", overflow:"scroll", }}>
-            {currentChat?.map(details => {
-              return (
-                <ChatBox isSystemGenerated={details?.isSystemGenerated} text={details?.message} />
-              );
-            })}
-          </Box>
-
-          <ChatInput
-            prompt={prompt}
-            placeholder={loading ? "Generating response..." : "Type Anything..."}
-            onChange={handlePromptChange}
-            onKeyDown={handleEnterPressed}
-            submitPrompt={submitPrompt}
-            setPrompt={setPrompt}
-          />
+          Coming Soon...
         </Box>
-      </Box>
+      )}
     </ThemeProvider>
   );
 }
