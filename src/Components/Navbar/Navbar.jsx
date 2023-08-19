@@ -46,7 +46,7 @@ function ResponsiveAppBar() {
               minWidth:"265px"
             }}
           >
-            Gadar
+            Gadar AI.
           </Typography>
 
           <Box sx={{ flexGrow: 1,  display: { xs: "flex", md: "none" } }}>

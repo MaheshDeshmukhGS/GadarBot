@@ -5,10 +5,10 @@ const ChatBox = ({ text, isSystemGenerated }) => {
   return (
     <Box
       sx={{
-        backgroundColor: isSystemGenerated ? "#E7FFFE" : "#fff",
+        backgroundColor: isSystemGenerated ? "#fff" : "#E7FFFE",
         boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
-        padding:"2rem",
-        borderRadius:"11px"
+        padding: "2rem",
+        borderRadius: "11px",
       }}
     >
       {text}

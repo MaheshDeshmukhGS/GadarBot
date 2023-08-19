@@ -1,24 +1,10 @@
 import { Box } from "@mui/material";
 import React from "react";
-import { v4 as uuid } from "uuid";
 import Button from "@mui/material/Button";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 
-const Sidebar = () => {
-  const recentChats = [
-    {
-      id: uuid(),
-      heading: "Showing Error while scanning",
-    },
-    {
-      id: uuid(),
-      heading: "Showing Error while scanning",
-    },
-    {
-      id: uuid(),
-      heading: "Showing Error while scanning",
-    },
-  ];
+const Sidebar = ({ setActiveChatId, activeChatId, chats, createNewChat }) => {
+  const recentChats = Object.values(chats);
 
   return (
     <Box
@@ -35,6 +21,7 @@ const Sidebar = () => {
     >
       <Button
         variant="outlined"
+        onClick={createNewChat}
         sx={{
           color: "#fff",
           borderColor: "#fff",
@@ -45,13 +32,25 @@ const Sidebar = () => {
       >
         + NEW CHAT
       </Button>
+
       {recentChats?.map(chat => {
         const { heading, id } = chat;
         return (
-          <Box key={id} sx={{ display: "flex", alignItems: "center", gap: "1rem",  "&:hover": {
-            opacity:"0.7",
-            transition:"opacity ease 200ms"
-          }, }}>
+          <Box
+            key={id}
+            onClick={() => setActiveChatId(id)}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding:" 0.5rem 0",
+              borderBottom: id === activeChatId ? "1px solid #fff" : "",
+              gap: "1rem",
+              "&:hover": {
+                opacity: "0.7",
+                transition: "opacity ease 200ms",
+              },
+            }}
+          >
             <TurnedInNotIcon />
             {heading}
           </Box>

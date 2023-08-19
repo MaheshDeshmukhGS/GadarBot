@@ -3,7 +3,7 @@ import "./chatInput.css";
 import SendIcon from "@mui/icons-material/Send";
 import { Box } from "@mui/material";
 
-const ChatInput = ({ prompt, onChange, ...rest }) => {
+const ChatInput = ({ prompt, onChange,onKeyDown, ...rest }) => {
   return (
     <Box sx={{ marginTop: "auto" }}>
       <Box
@@ -22,9 +22,11 @@ const ChatInput = ({ prompt, onChange, ...rest }) => {
         <input
           value={prompt}
           onChange={onChange}
+          onKeyDown={onKeyDown}
           {...rest}
           placeholder="Type Anything..."
           type="text"
+
           className="chat_input"
         />
         <SendIcon color="#d4cece" />
